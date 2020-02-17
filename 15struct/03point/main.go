@@ -22,7 +22,7 @@ func main() {
 	f(p)
 	// f没有改到值
 	fmt.Println(p)          //{te 8}
-	fmt. ("%T \n", p)  //person
+	fmt.Printf("%T\n", p)   //person
 	fmt.Printf("%p \n", &p) //0xc0000044a0
 	f2(&p)
 	fmt.Println(p)

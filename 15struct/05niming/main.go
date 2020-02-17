@@ -9,10 +9,10 @@ type person struct {
 }
 
 func main() {
-	p1:=person{
+	p1 := person{
 		"周玲",
 		2323,
-		false
+		false,
 	}
 	// 访问匿名字段
 	fmt.Println(p1.bool)
