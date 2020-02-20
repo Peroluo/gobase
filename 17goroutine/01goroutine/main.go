@@ -5,13 +5,11 @@ import (
 	"time"
 )
 
-func main()  {
-	for i:=0;i<1000;i++{
-		go func(i int)  {
-			fmt.Println("hello",i)
+func main() {
+	for i := 0; i < 1000; i++ {
+		go func(i int) {
+			fmt.Println(i)
 		}(i)
 	}
-	fmt.Println("main")
-	time.Sleep(time.Second)
-	fmt.Println("？？")
+	time.Sleep(time.Second * 2)
 }

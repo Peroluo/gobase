@@ -2,32 +2,31 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
-	"sync"
-	"time"
 )
 
-func f() {
-	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < 5; i++ {
-		a := rand.Intn(10)
-		fmt.Println(a)
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for j := range jobs {
+		fmt.Printf("worker:%d start job:%d\n", id, j)
+		fmt.Printf("worker:%d end job:%d\n", id, j)
+		results <- j * 2
 	}
 }
-
-func f1(i int) {
-	defer wait.Done()
-	time.Sleep(time.Second * time.Duration(rand.Intn(3)))
-	fmt.Println(i)
-}
-
-var wait sync.WaitGroup
 
 func main() {
-	for i := 0; i < 10; i++ {
-		wait.Add(1)
-		go f1(i)
+	jobs := make(chan int, 100)
+	results := make(chan int, 100)
+	// 5个任务
+	for j := 1; j <= 5; j++ {
+		jobs <- j
 	}
-	wait.Wait()
-	fmt.Println("???执行完了")
+
+	// 开启3个goroutine
+	for w := 1; w <= 3; w++ {
+		go worker(w, jobs, results)
+	}
+	// 输出结果
+	for a := 1; a <= 5; a++ {
+		// 如果没有接受到值，就会造成main一直等待，直到完成接收到值
+		fmt.Println(<-results)
+	}
 }
