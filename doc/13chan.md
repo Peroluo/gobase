@@ -36,7 +36,8 @@ func main() {
 			ch1 <- i
 		}(i)
 	}
-	wg.Wait()
+	wg.Wait() // 等待所有go func执行完~
+    close(ch1)
 	for c := range ch1 {
 		fmt.Println(c)
 	}
@@ -109,6 +110,20 @@ ch1 <- 3
 // close(ch1) // fatal error: all goroutines are asleep - deadlock!
 for c := range ch1 {
     fmt.Println(c)
+}
+```
+
+#### 5.select
+
+```go
+ch := make(chan int, 10)
+for i := 0; i < 10; i++ {
+    select {
+        case x := <-ch:
+        fmt.Println(x)
+        case ch <- i:
+        fmt.Println("管道添加值了", i)
+    }
 }
 ```
 
